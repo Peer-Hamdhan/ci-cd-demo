@@ -6,8 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  setup-vm:
-    name: build-test
+  build-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -19,20 +18,14 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
-      - name: Set exec perm for gradle
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
-  lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Spotless and detekt Check
+      - name: Spotless and Detekt
         run: ./gradlew spotlessCheck detekt
 
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build test
+      - name: Build and test
         run: ./gradlew build
