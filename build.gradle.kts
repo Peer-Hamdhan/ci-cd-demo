@@ -2,6 +2,25 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(ktorLibs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.spotless)
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    // rootPackage not enforced: demo keeps sources at src/main/kotlin root
+    config.setFrom(file("detekt.yml"))
+}
+
+spotless {
+    kotlin {
+        target("src//**/*.kt")
+        ktlint().editorConfigOverride(mapOf("ktlint_standard_no-wildcard-imports" to "disabled"))
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+    }
 }
 
 group = "com.demo"

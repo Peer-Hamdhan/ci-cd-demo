@@ -1,0 +1,7 @@
+style:
+  WildcardImport:
+    excludeImports:
+      - 'io.ktor.*'
+naming:
+  InvalidPackageDeclaration:
+    active: false

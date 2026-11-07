@@ -6,7 +6,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PaymentValidatorTest {
-
     @Test
     fun `valid payment is accepted`() {
         assertTrue(PaymentValidator.validate(5_000, "INR").isValid)
