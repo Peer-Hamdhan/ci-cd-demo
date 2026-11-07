@@ -13,7 +13,7 @@ object PaymentValidator {
         amount: Long,
         currency: String,
     ): ValidationResult = when {
-        amount < 0 -> ValidationResult(false, "Amount must be positive")
+        amount <= 0 -> ValidationResult(false, "Amount must be positive")
         currency.uppercase() !in supportedCurrency -> ValidationResult(false, "Unsupported currency")
         amount > MAX_AMOUNT -> ValidationResult(false, "Amount exceeds limit")
         else -> ValidationResult(true)
