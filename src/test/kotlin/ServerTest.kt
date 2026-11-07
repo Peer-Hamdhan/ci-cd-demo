@@ -1,18 +1,49 @@
 package com.demo
 
-import io.ktor.client.request.get
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.testApplication
-import kotlin.test.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.server.testing.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ServerTest {
 
-    @Test
-    fun `test root endpoint`() = testApplication {
-        // loads default configuration
-        configure()
-        // verify server root returns 200
-        assertEquals(HttpStatusCode.OK, client.get("/").status)
+    private fun runTest(block: suspend ApplicationTestBuilder.() -> Unit) = testApplication {
+        application {
+            configureSerialization()
+            configureRouting()
+        }
+        block()
     }
 
+    @Test
+    fun `health endpoint returns OK`() = runTest {
+        val response = client.get("/health")
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("OK", response.bodyAsText())
+    }
+
+    @Test
+    fun `valid payment is accepted`() = runTest {
+        val response = client.post("/payments/validate") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"amount":5000,"currency":"INR"}""")
+        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertTrue(response.bodyAsText().contains("\"valid\":true"))
+    }
+
+    @Test
+    fun `negative payment is rejected with reason`() = runTest {
+        val response = client.post("/payments/validate") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"amount":-100,"currency":"INR"}""")
+        }
+        assertEquals(HttpStatusCode.OK, response.status)
+        val body = response.bodyAsText()
+        assertTrue(body.contains("\"valid\":false"))
+        assertTrue(body.contains("Amount must be positive"))
+    }
 }
