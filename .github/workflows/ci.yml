@@ -28,7 +28,7 @@ jobs:
   lint-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Spotless Check
+      - name: Spotless and detekt Check
         run: ./gradlew spotlessCheck detekt
 
   build-test:
