@@ -26,6 +26,9 @@ jobs:
           chmod +x gradlew
           ./gradlew build
 
+      - name: Build distribution
+        run: ./gradlew installDist
+
       - name: Lowercase image name
         id: img
         run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
