@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Running Spotless and Detekt..."
+./gradlew spotlessCheck detekt --quiet || {
+  echo ""
+  echo "Checks failed. Run ./gradlew spotlessApply to fix formatting, then commit again."
+  exit 1
+}

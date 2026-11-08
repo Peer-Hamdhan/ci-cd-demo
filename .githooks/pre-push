@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Running tests..."
+./gradlew test --quiet || {
+  echo ""
+  echo "Tests failed. Push aborted."
+  exit 1
+}
