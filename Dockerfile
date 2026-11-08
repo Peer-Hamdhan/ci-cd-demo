@@ -1,8 +1,8 @@
 # Stage 1: build
-FROM gradle:jdk17 AS build
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 COPY . .
-RUN gradle installDist --no-daemon
+RUN chmod +x gradlew && ./gradlew installDist --no-daemon
 
 # Stage 2: run (smaller image, no build tools)
 FROM eclipse-temurin:17-jre
