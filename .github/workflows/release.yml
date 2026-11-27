@@ -64,7 +64,7 @@ jobs:
       - name: Deploy to server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          TARGET: ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}
+          TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SERVER_HOST }}
         run: |
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_REF_NAME}"
           echo "$SSH_PRIVATE_KEY" > key.pem
